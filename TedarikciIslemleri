@@ -1,0 +1,19 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class TedarikciIslemleri {
+    public boolean tedarikciEkle(Tedarikci tedarikci) {
+        try (Connection conn = VeritabaniBaglanti.baglan()) {
+            String sql = "INSERT INTO Tedarikci (adi, iletisim) VALUES (?, ?)";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, tedarikci.getAdi());
+            pstmt.setString(2, tedarikci.getIletisim());
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+}
