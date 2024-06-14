@@ -1,0 +1,66 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class KullaniciGirisi extends JFrame {
+    private JTextField kullaniciAdiField;
+    private JPasswordField sifreField;
+
+    public KullaniciGirisi() {
+        setTitle("Kullanıcı Girişi");
+        setSize(300, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(4, 2));
+
+        JLabel kullaniciAdiLabel = new JLabel("Kullanıcı Adı:");
+        kullaniciAdiField = new JTextField();
+        JLabel sifreLabel = new JLabel("Şifre:");
+        sifreField = new JPasswordField();
+
+        JButton girisButton = new JButton("Giriş");
+        JButton yeniSifreButton = new JButton("Yeni Şifre Belirle");
+        
+        girisButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String kullaniciAdi = kullaniciAdiField.getText();
+                String sifre = new String(sifreField.getPassword());
+
+                KullaniciIslemleri islemler = new KullaniciIslemleri();
+                if (islemler.kullaniciGirisi(kullaniciAdi, sifre)) {
+                    JOptionPane.showMessageDialog(null, "Giriş Başarılı");
+                    // Ana ekranı göster
+                    new AnaEkran().setVisible(true);
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Kullanıcı adı veya şifre yanlış");
+                }
+            }
+        });
+
+        yeniSifreButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String kullaniciAdi = kullaniciAdiField.getText();
+                String sifre = new String(sifreField.getPassword());
+                
+                // Yeni şifre belirleme ekranını göster
+                YeniSifreBelirlemeDialog yeniSifreDialog = new YeniSifreBelirlemeDialog(KullaniciGirisi.this);
+                yeniSifreDialog.setVisible(true);
+            }
+        });
+
+        panel.add(kullaniciAdiLabel);
+        panel.add(kullaniciAdiField);
+        panel.add(sifreLabel);
+        panel.add(sifreField);
+        panel.add(girisButton);
+        panel.add(yeniSifreButton);
+
+        add(panel);
+    }
+}
