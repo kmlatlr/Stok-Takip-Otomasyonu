@@ -1,0 +1,75 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.math.BigDecimal;
+
+public class UrunYonetimi extends JFrame {
+    private JTextField urunIdField, adiField, kategoriField, stokMiktariField, birimFiyatiField;
+
+    public UrunYonetimi() {
+        setTitle("Ürün Yönetimi");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(6, 2));
+
+        JLabel urunIdLabel = new JLabel("Ürün ID:");
+        urunIdField = new JTextField();
+        JLabel adiLabel = new JLabel("Adı:");
+        adiField = new JTextField();
+        JLabel kategoriLabel = new JLabel("Kategori:");
+        kategoriField = new JTextField();
+        JLabel stokMiktariLabel = new JLabel("Stok Miktarı:");
+        stokMiktariField = new JTextField();
+        JLabel birimFiyatiLabel = new JLabel("Birim Fiyatı:");
+        birimFiyatiField = new JTextField();
+
+        JButton ekleButton = new JButton("Ekle");
+        ekleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    int urunId = Integer.parseInt(urunIdField.getText());
+                    String adi = adiField.getText();
+                    String kategori = kategoriField.getText();
+                    int stokMiktari = Integer.parseInt(stokMiktariField.getText());
+                    BigDecimal birimFiyati = new BigDecimal(birimFiyatiField.getText());
+
+                    Urun urun = new Urun();
+                    urun.setUrunId(urunId);
+                    urun.setAdi(adi);
+                    urun.setKategori(kategori);
+                    urun.setStokMiktari(stokMiktari);
+                    urun.setBirimFiyati(birimFiyati);
+
+                    UrunIslemleri islemler = new UrunIslemleri();
+                    if (islemler.urunEkle(urun)) {
+                        JOptionPane.showMessageDialog(null, "Ürün başarıyla eklendi");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Ürün eklenirken hata oluştu");
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Lütfen geçerli değerler girin");
+                }
+            }
+        });
+
+        panel.add(urunIdLabel);
+        panel.add(urunIdField);
+        panel.add(adiLabel);
+        panel.add(adiField);
+        panel.add(kategoriLabel);
+        panel.add(kategoriField);
+        panel.add(stokMiktariLabel);
+        panel.add(stokMiktariField);
+        panel.add(birimFiyatiLabel);
+        panel.add(birimFiyatiField);
+        panel.add(new JLabel()); // Boş etiket hizalama için
+        panel.add(ekleButton);
+
+        add(panel);
+    }
+}
