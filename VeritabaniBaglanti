@@ -10,4 +10,4 @@ public class VeritabaniBaglanti {
     public static Connection baglan() throws SQLException {
         return DriverManager.getConnection(DB_URL, USER, PASS);
     }
-}
+} 
