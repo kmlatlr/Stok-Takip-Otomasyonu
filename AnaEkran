@@ -1,0 +1,55 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class AnaEkran extends JFrame {
+    public AnaEkran() {
+        setTitle("Ana Ekran");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(4, 1));
+
+        JButton urunYonetimiButton = new JButton("Ürün Yönetimi");
+        urunYonetimiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new UrunYonetimi().setVisible(true);
+            }
+        });
+
+        JButton tedarikciYonetimiButton = new JButton("Tedarikçi Yönetimi");
+        tedarikciYonetimiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new TedarikciYonetimi().setVisible(true);
+            }
+        });
+
+        JButton siparisYonetimiButton = new JButton("Sipariş Yönetimi");
+        siparisYonetimiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new SiparisYonetimi().setVisible(true);
+            }
+        });
+
+        panel.add(urunYonetimiButton);
+        panel.add(tedarikciYonetimiButton);
+        panel.add(siparisYonetimiButton);
+
+        add(panel);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new AnaEkran().setVisible(true);
+            }
+        });
+    }
+}
