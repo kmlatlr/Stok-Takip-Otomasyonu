@@ -30,5 +30,5 @@ public class KullaniciIslemleri {
             e.printStackTrace();
         }
         return false;
-    }
+    } 
 }
