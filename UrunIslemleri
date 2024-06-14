@@ -1,0 +1,22 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class UrunIslemleri {
+    public boolean urunEkle(Urun urun) {
+        try (Connection conn = VeritabaniBaglanti.baglan()) {
+            String sql = "INSERT INTO Urun (urun_id, adi, kategori, stok_miktari, birim_fiyati) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, urun.getUrunId());
+            pstmt.setString(2, urun.getAdi());
+            pstmt.setString(3, urun.getKategori());
+            pstmt.setInt(4, urun.getStokMiktari());
+            pstmt.setBigDecimal(5, urun.getBirimFiyati());
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+}
