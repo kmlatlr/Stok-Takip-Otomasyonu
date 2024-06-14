@@ -1,0 +1,84 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
+
+public class SiparisYonetimi extends JFrame {
+    private JTextField urunIdField, miktarField;
+    private JSpinner tarihSpinner;
+
+    public SiparisYonetimi() {
+        setTitle("Sipariş Yönetimi");
+        setSize(400, 200);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(4, 2));
+
+        JLabel urunIdLabel = new JLabel("Ürün ID:");
+        urunIdField = new JTextField();
+        JLabel miktarLabel = new JLabel("Miktar:");
+        miktarField = new JTextField();
+        JLabel tarihLabel = new JLabel("Tarih:");
+        tarihSpinner = new JSpinner(new SpinnerDateModel());
+        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(tarihSpinner, "yyyy-MM-dd");
+        tarihSpinner.setEditor(dateEditor);
+
+        JButton ekleButton = new JButton("Ekle");
+        ekleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    int urunId = Integer.parseInt(urunIdField.getText().trim());
+                    int miktar = Integer.parseInt(miktarField.getText().trim());
+                    Date tarih = (Date) tarihSpinner.getValue();
+
+                    if (urunId <= 0 || miktar <= 0) {
+                        throw new IllegalArgumentException("Ürün ID ve miktar pozitif olmalıdır.");
+                    }
+
+                    Siparis siparis = new Siparis();
+                    siparis.setUrunId(urunId);
+                    siparis.setMiktar(miktar);
+                    siparis.setTarih(tarih);
+
+                    // SiparisIslemleri sınıfını kullanarak sipariş ekleyin ve veritabanından otomatik artan kimliği alın
+                    SiparisIslemleri islemler = new SiparisIslemleri();
+                    int eklenenSiparisId = islemler.siparisEkle(siparis);
+                    if (eklenenSiparisId != -1) {
+                        siparis.setId(eklenenSiparisId); // Veritabanından alınan id'yi Siparis nesnesine atayın
+                        JOptionPane.showMessageDialog(null, "Sipariş başarıyla eklendi. Sipariş ID: " + eklenenSiparisId);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Sipariş eklenirken hata oluştu");
+                    }
+                } catch (NumberFormatException nfe) {
+                    JOptionPane.showMessageDialog(null, "Lütfen geçerli bir Ürün ID ve miktar girin.", "Hatalı Giriş", JOptionPane.ERROR_MESSAGE);
+                } catch (IllegalArgumentException iae) {
+                    JOptionPane.showMessageDialog(null, iae.getMessage(), "Hatalı Giriş", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Bir hata oluştu: " + ex.getMessage(), "Hata", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        panel.add(urunIdLabel);
+        panel.add(urunIdField);
+        panel.add(miktarLabel);
+        panel.add(miktarField);
+        panel.add(tarihLabel);
+        panel.add(tarihSpinner);
+        panel.add(ekleButton);
+
+        add(panel);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            SiparisYonetimi frame = new SiparisYonetimi();
+            frame.setVisible(true);
+        });
+    }
+}
