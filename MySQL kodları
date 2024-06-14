@@ -1,0 +1,37 @@
+DROP DATABASE IF EXISTS stok_takip;
+CREATE DATABASE stok_takip;
+
+USE stok_takip;
+
+CREATE TABLE Kullanici (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    kullanici_adi VARCHAR(50) NOT NULL,
+    sifre VARCHAR(50) NOT NULL
+);
+
+
+CREATE TABLE Urun (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    urun_id INT NOT NULL,
+    adi VARCHAR(100) NOT NULL,
+    kategori VARCHAR(50),
+    stok_miktari INT DEFAULT 0,
+    birim_fiyati DECIMAL(10, 2)
+);
+
+CREATE TABLE Tedarikci (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    adi VARCHAR(100) NOT NULL,
+    iletisim VARCHAR(100)
+);
+
+DROP TABLE IF EXISTS Siparis;
+
+CREATE TABLE Siparis (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    urun_id INT,
+    miktar INT,
+    tarih DATE,
+    FOREIGN KEY (urun_id) REFERENCES Urun(id)  -- Değişiklik burada
+);
+ALTER TABLE Urun CHANGE COLUMN id urun_id INT;
